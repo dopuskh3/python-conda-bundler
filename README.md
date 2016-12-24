@@ -6,10 +6,26 @@
 
 This package installs a distutils command that bundle python package into a self contained conda bundle.
 
-
-# bdist_conda options:
+## bdist_conda options:
 
 * `--conda-packages=`: a list of conda package specification to install in env
 * `--conda-url=`: Miniconda shell scritp distribution URL
 * `--conda-bin=`: Conda command to invoke (default `conda`)
 * `--conda-install-path=`: conda install path if `--conda-url=` is specified
+
+Note that options can also be specified in `setup.cfg` file:
+
+~~~~
+[bdist_conda]
+conda-packages=foo,bar,bazz
+conda-url=file:///also/support/for/file/urls.sh
+cona-instal-path=/tmp/conda-install-path
+~~~~
+
+## Testing
+
+Install tox and run:
+
+```
+  $ tox
+```
