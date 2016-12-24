@@ -19,4 +19,5 @@ env:
     - TOXENV=pylama
     - TOXENV=py27-coverage
     - TOXENV=py35-coverage
+    - TOXENV=pypa_sampleproject_packaging
 
