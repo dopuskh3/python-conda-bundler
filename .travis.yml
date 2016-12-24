@@ -1,10 +1,5 @@
 language: python
-python:
-  - 3.5
 
-install:
-  ### Python build dependencies
-  - if [ -n "$TOXENV" ]; then pip install tox coveralls; fi
 script:
   ### Python
   - if [ -n "$TOXENV" ]; then tox; fi
@@ -13,11 +8,37 @@ after_success:
   ### Python
   - if [ -n "$TOXENV" ]; then coveralls; fi
 
+matrix:
+  include:
+    - os: linux
+      env: TOXENV=pylama
+      python: 3.5
+    - os: linux
+      env: TOXENV=py27-coverage
+      python: 3.5
+    - os: linux
+      env: TOXENV=py35-coverage
+      python: 3.5
+    - os: linux
+      env: TOXENV=pypa_sampleproject_packaging
+      python: 3.5
+    - os: osx
+      language: generic
+      env: TOXENV=osx
 
-env:
-  matrix:
-    - TOXENV=pylama
-    - TOXENV=py27-coverage
-    - TOXENV=py35-coverage
-    - TOXENV=pypa_sampleproject_packaging
+#os:
+#  matrix:
+#    - os: linux
+# De-activate OSX build
+#  - os: osx
+#    sudo: required
+#    language: generic
+
+install: |
+  if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+    brew update;
+    brew install python3
+  fi
+  if [ -n "$TOXENV" ]; then pip install tox coveralls; fi
+
 
