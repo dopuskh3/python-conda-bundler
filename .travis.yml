@@ -1,0 +1,22 @@
+language: python
+python:
+  - 2.7
+
+install:
+  ### Python build dependencies
+  - if [ -n "$TOXENV" ]; then pip install tox coveralls; fi
+script:
+  ### Python
+  - if [ -n "$TOXENV" ]; then tox; fi
+
+after_success:
+  ### Python
+  - if [ -n "$TOXENV" ]; then coveralls; fi
+
+
+env:
+  matrix:
+    - TOXENV=pylama
+    - TOXENV=py27-coverage
+    - TOXENV=py35-coverage
+
