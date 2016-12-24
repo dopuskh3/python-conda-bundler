@@ -17,8 +17,7 @@ CONDA_BASH_FILENAME = 'conda.sh'
 if platform.system() == 'Darwin':
     DEFAULT_CONDA_URL = ''
 elif platform.system() == 'Linux':
-    # DEFAULT_CONDA_URL = 'https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh'
-    DEFAULT_CONDA_URL = "file:///home/fv/Downloads/Miniconda3-latest-Linux-x86_64.sh"
+    DEFAULT_CONDA_URL = 'https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh'
 else:
     raise RuntimeError("Unsupported platform: %s" % platform.system())
 
