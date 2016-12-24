@@ -1,0 +1,10 @@
+.tox
+.idea/**
+.coverage
+.cache
+**/__pycache__/**
+dist/
+*.sw?
+**/*.pyc
+env/**
+*.egg-info/**
