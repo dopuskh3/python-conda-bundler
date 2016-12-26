@@ -15,7 +15,7 @@ else:
 CONDA_BASH_FILENAME = 'conda.sh'
 
 if platform.system() == 'Darwin':
-    DEFAULT_CONDA_URL = ''
+    DEFAULT_CONDA_URL = 'https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh'
 elif platform.system() == 'Linux':
     DEFAULT_CONDA_URL = 'https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh'
 else:
