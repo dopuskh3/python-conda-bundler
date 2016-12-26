@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/dopuskh3/python-bundler/badge.svg?branch=master)](https://coveralls.io/github/dopuskh3/python-bundler?branch=master)
 [![Dependency Status](https://gemnasium.com/badges/github.com/dopuskh3/python-bundler.svg)](https://gemnasium.com/github.com/dopuskh3/python-bundler)
 
-#Python-bundler
+#Python-conda-bundler
 
 This package installs a distutils command that bundle python package into a self contained conda bundle.
 

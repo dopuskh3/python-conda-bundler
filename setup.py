@@ -3,7 +3,7 @@ from distutils.core import setup
 
 import setuptools
 
-setup(name="python-bundler",
+setup(name="python-conda-bundler",
       version='0.1',
       install_requires=[
       ],
