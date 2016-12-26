@@ -10,8 +10,8 @@ This package installs a distutils command that bundle python package into a self
 
 * `--conda-packages=`: a list of conda package specification to install in env
 * `--conda-url=`: Miniconda shell scritp distribution URL
-* `--conda-bin=`: Conda command to invoke (default `conda`)
 * `--conda-install-path=`: conda install path if `--conda-url=` is specified
+* `--bundle-build-dir=`: bundle build directory
 
 Note that options can also be specified in `setup.cfg` file:
 
@@ -20,6 +20,7 @@ Note that options can also be specified in `setup.cfg` file:
 conda-packages=foo,bar,bazz
 conda-url=file:///also/support/for/file/urls.sh
 cona-instal-path=/tmp/conda-install-path
+bundle-build-dir=/tmp/bundle_build_dir
 ~~~~
 
 ## Testing

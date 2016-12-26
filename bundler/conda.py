@@ -1,10 +1,9 @@
 """Conda-related utilities."""
 import distutils.log
+import os
 import platform
 import subprocess
 import sys
-
-import os
 import tempfile
 
 if sys.version_info[0] > 2:
@@ -20,6 +19,9 @@ elif platform.system() == 'Linux':
     DEFAULT_CONDA_URL = 'https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh'
 else:
     raise RuntimeError("Unsupported platform: %s" % platform.system())
+
+if 'CONDA_URL' in os.environ:
+    DEFAULT_CONDA_URL = os.environ['CONDA_URL']
 
 
 def install_conda(command):

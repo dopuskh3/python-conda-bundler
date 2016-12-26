@@ -1,10 +1,10 @@
+import os
+import shutil
 import sys
+import tempfile
 import unittest
 
-import os
 import setuptools
-import shutil
-import tempfile
 
 from bundler import bundler_cmd, conda
 
@@ -42,8 +42,7 @@ class BundlerCommandTest(unittest.TestCase):
         dist.script_name = self._fake_setup_script
         return dist
 
-    def _create_fake_setup_script(self):
-        self._fake_setup_script = tempfile.mktemp()
+    def _create_fake_setup_script(self, python_executable):
         with open(self._fake_setup_script, 'w') as fd:
             fd.write("""#!/usr/bin/env python
 import sys
@@ -51,21 +50,23 @@ print(sys.executable)
 assert(sys.executable == \"{expected_executable}\")
 if sys.argv[1] != 'install':
     raise RuntimeError('Invalid first argument')
-""".format(expected_executable=self._env_python))
+""".format(expected_executable=python_executable))
 
     def setUp(self):
         self._env_build_path = tempfile.mkdtemp()
-        self._env_python = os.path.join(self._env_build_path, 'bin', 'python')
-        self._create_fake_setup_script()
+        self._fake_setup_script = tempfile.mktemp()
 
     def tearDown(self):
-        shutil.rmtree(self._env_build_path)
+        if os.path.isdir(self._env_build_path):
+            shutil.rmtree(self._env_build_path)
         os.remove(self._fake_setup_script)
 
     def test_create_conda_env(self):
         command = bundler_cmd.BundleCommand(self._get_distribution())
         command.initialize_options()
         command.conda_url = conda.DEFAULT_CONDA_URL
-        command.conda_env_build_path = self._env_build_path
+        command.bundle_build_dir = self._env_build_path
         command.finalize_options()
+        self._create_fake_setup_script(os.path.join(command.bundle_build_path, 'bin', 'python'))
+        command.distribution.script_name = self._fake_setup_script
         command.run()

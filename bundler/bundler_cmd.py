@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 """Bundle package into a conda environment."""
-import subprocess
-from distutils.cmd import Command
-
 import os
 import re
 import shutil
+import subprocess
+import platform
 import tempfile
 from distutils import log
+from distutils.cmd import Command
 
 from bundler import conda
 
-BUNDLE_SUFFIX = "bundle"
+BUNDLE_SUFFIX = "bundle-{system}-{arch}".format(
+    system=platform.system(),
+    arch=platform.machine()
+)
+
+
 
 
 class ShebangFixer:
@@ -64,8 +69,8 @@ class BundleCommand(Command):
         ('conda-packages=', None,
          'Coma-separated list of conda package specification to install in bundle'),
         ('conda-url=', None, 'URL to conda installer'),
-        ('conda-bin=', None, 'Conda command to invoke'),
         ('conda-install-path=', None, 'Target path to install conda if conda-url is specified.'),
+        ('bundle-build-dir=', None, 'Bundle build directory.'),
     ]
 
     def _get_output_build_name(self):
@@ -125,36 +130,54 @@ class BundleCommand(Command):
 
     def initialize_options(self):
         """Initialize options."""
-        self.conda_file = None
-        self.conda_url = None
+        self.conda_url = conda.DEFAULT_CONDA_URL
         self.conda_packages = None
         self.conda_install_path = tempfile.mkdtemp()
-        self.conda_bin = 'conda'
-        self.conda_env_build_path = os.path.join(tempfile.mkdtemp(), self._get_output_build_name())
+        self.bundle_build_dir = tempfile.mkdtemp()
 
     def finalize_options(self):
         """Finalize options."""
-        if self.conda_file and not os.path.isfile(self.conda_file):
-            raise IOError("%s do not exists." % self.conda_file)
+        self.announce("Installing local conda installation from {conda_url}".format(
+            conda_url=self.conda_url
+        ), level=log.INFO)
+
+        self.bundle_build_path = os.path.join(self.bundle_build_dir, self._get_output_build_name())
+
+        self.announce("Building bundle in {conda_env_build_path}".format(
+            conda_env_build_path=self.bundle_build_path
+        ), level=log.INFO)
+
+        if self.conda_packages:
+            self.announce("Will install the following packages in bundle: {conda_packages}".format(
+                conda_packages=self.conda_packages
+            ), level=log.INFO)
+        else:
+            self.announce("No conda packages selected for installation", level=log.INFO)
+
+    def _cleanup(self):
+        self.announce("Cleaning up bundle build directory: %s" % self.bundle_build_dir, level=log.INFO)
+        shutil.rmtree(self.bundle_build_dir)
+        self.announce("Cleaning up conda install directory: %s" % self.conda_install_path, level=log.INFO)
+        shutil.rmtree(self.conda_install_path)
 
     def run(self):
         """Run command."""
         tmp_archive_name = "{env_path}-{bundle_suffix}.tar.gz".format(
             bundle_suffix=BUNDLE_SUFFIX,
-            env_path=self.conda_env_build_path)
+            env_path=self.bundle_build_path)
         dist_directory = os.path.join(os.path.dirname(self.distribution.script_name),
                                       'dist')
         dist_file = os.path.join(dist_directory, os.path.basename(tmp_archive_name))
-        if self.conda_url:
-            self.conda_bin = conda.install_conda(self)
 
-        self.create_conda_env(self.conda_env_build_path)
-        self.fix_env_shebang(self.conda_env_build_path)
-        self.install_package(self.conda_env_build_path, self.distribution.script_name)
-        self.fix_env_shebang(self.conda_env_build_path)
-        self.compress_bundle(self.conda_env_build_path, tmp_archive_name)
+        self.conda_bin = conda.install_conda(self)
+        self.create_conda_env(self.bundle_build_path)
+        self.fix_env_shebang(self.bundle_build_path)
+        self.install_package(self.bundle_build_path, self.distribution.script_name)
+        self.fix_env_shebang(self.bundle_build_path)
+        self.compress_bundle(self.bundle_build_path, tmp_archive_name)
 
         if not os.path.isdir(dist_directory):
             os.makedirs(dist_directory)
         self.announce("Renaming %s -> %s" % (tmp_archive_name, dist_file), level=log.INFO)
         shutil.move(tmp_archive_name, dist_file)
+        self._cleanup()
