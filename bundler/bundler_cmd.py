@@ -17,8 +17,6 @@ BUNDLE_SUFFIX = "bundle-{system}-{arch}".format(
 )
 
 
-
-
 class ShebangFixer:
     """Fix python script shebangs.
 
@@ -155,9 +153,11 @@ class BundleCommand(Command):
             self.announce("No conda packages selected for installation", level=log.INFO)
 
     def _cleanup(self):
-        self.announce("Cleaning up bundle build directory: %s" % self.bundle_build_dir, level=log.INFO)
+        self.announce("Cleaning up bundle build directory: %s" % self.bundle_build_dir,
+                      level=log.INFO)
         shutil.rmtree(self.bundle_build_dir)
-        self.announce("Cleaning up conda install directory: %s" % self.conda_install_path, level=log.INFO)
+        self.announce("Cleaning up conda install directory: %s" % self.conda_install_path,
+                      level=log.INFO)
         shutil.rmtree(self.conda_install_path)
 
     def run(self):
