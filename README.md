@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/dopuskh3/python-bundler.svg?branch=master)](https://travis-ci.org/dopuskh3/python-bundler)
-[![Coverage Status](https://coveralls.io/repos/github/dopuskh3/python-bundler/badge.svg?branch=master)](https://coveralls.io/github/dopuskh3/python-bundler?branch=master)
-[![Dependency Status](https://gemnasium.com/badges/github.com/dopuskh3/python-bundler.svg)](https://gemnasium.com/github.com/dopuskh3/python-bundler)
+[![Build Status](https://travis-ci.org/dopuskh3/python-conda-bundler.svg?branch=master)](https://travis-ci.org/dopuskh3/python-conda-bundler)
+[![Coverage Status](https://coveralls.io/repos/github/dopuskh3/python-conda-bundler/badge.svg?branch=master)](https://coveralls.io/github/dopuskh3/python-conda-bundler?branch=master)
+[![Dependency Status](https://gemnasium.com/badges/github.com/dopuskh3/python-conda-bundler.svg)](https://gemnasium.com/github.com/dopuskh3/python-conda-bundler)
 
 #Python-conda-bundler
 
